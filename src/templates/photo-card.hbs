@@ -1,23 +1,19 @@
-{{#each hits}}
-<a href="{{largeImageURL}}">
+{{#each this}}
   <div class="photo-card">
-  <img class="photo-card__img" src="{{webformatURL}}" alt="{{tags}}" loading="lazy" />
-  <div class="info">
-    <p class="info-item">
-      <b><span>Likes</span> {{likes}}</b>
-    </p>
-    <p class="info-item">
-      <b><span>Views</span> {{views}}</b>
-    </p>
-    <p class="info-item">
-      <b><span>Comments</span> {{comments}}</b>
-    </p>
-    <p class="info-item">
-      <b><span>Downloads</span> {{downloads}}</b>
-    </p>
-  </div>
+    <img class="photo-card__image" src="{{webformatURL}}" alt="{{tags}}" loading="lazy" />
+    <div class="info">
+      <p class="info-item">
+        <b>Likes: {{likes}}</b>
+      </p>
+      <p class="info-item">
+        <b>Views: {{views}}</b>
+      </p>
+      <p class="info-item">
+        <b>Comments: {{comments}}</b>
+      </p>
+      <p class="info-item">
+        <b>Downloads: {{downloads}}</b>
+      </p>
+    </div>
 </div>
-</a>
 {{/each}}
-
-{{!-- <a href="images/image1.jpg"><img src="images/thumbs/thumb1.jpg" alt="" title=""/></a> --}}
