@@ -8,13 +8,14 @@ import cardTpl from './templates/photo-card.hbs';
 const refs = {
   form: document.querySelector('#search-form'),
   gallery: document.querySelector('.gallery'),
-  loadMoreBtn: document.querySelector('.load-more'),
+  infiniteScroll: document.querySelector('.js-infinite-scroll'),
+  // loadMoreBtn: document.querySelector('.load-more'),
 };
 const imagesApiService = new ImagesApiService();
 const lightbox = new SimpleLightbox('.gallery a');
 
 refs.form.addEventListener('submit', onFormSubmit);
-refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);
+// refs.loadMoreBtn.addEventListener('click', onLoadMoreBtnClick);
 
 function onFormSubmit(e) {
   e.preventDefault();
@@ -25,7 +26,7 @@ function onFormSubmit(e) {
   }
 
   clearGallery();
-  hideLoadMoreBtn();
+  // hideLoadMoreBtn();
   imagesApiService.query = searchQuery;
   imagesApiService.resetPage();
 
@@ -39,21 +40,22 @@ function onFormSubmit(e) {
     Notify.success(`Hooray! We found ${images.totalHits} images.`);
     renderGalleryImages(images);
     lightbox.refresh();
-    showLoadMoreBtn();
+    // showLoadMoreBtn();
+    registerIntersectionObserver();
   });
 }
 
-function onLoadMoreBtnClick() {
+function loadMoreImages() {
   imagesApiService.fetchImages().then(images => {
     if (images.hits.length === 0) {
       Notify.info("We're sorry, but you've reached the end of search results.");
-      hideLoadMoreBtn();
+      // hideLoadMoreBtn();
       return;
     }
 
     renderGalleryImages(images);
     lightbox.refresh();
-    pageScrolling();
+    // pageScrolling();
   });
 }
 
@@ -82,4 +84,21 @@ function pageScrolling() {
     top: cardHeight * 2,
     behavior: 'smooth',
   });
+}
+
+// ---------------> Infinite scroll <----------------
+
+function registerIntersectionObserver() {
+  const callback = entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        loadMoreImages();
+      }
+    });
+  };
+  const observer = new IntersectionObserver(callback, {
+    rootMargin: '200px',
+  });
+
+  observer.observe(refs.infiniteScroll);
 }
